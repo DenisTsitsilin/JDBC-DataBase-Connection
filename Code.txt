@@ -1,0 +1,55 @@
+package database;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Locale;
+import javax.swing.JOptionPane;
+
+public class Database {
+    // Подключение к JDBC
+    public static String config = "oracle.jdbc.driver.OracleDriver";
+    
+    // Подключение к самой БД
+    final private static String server = "@localhost";
+    final private static String port = "1521";
+    final private static String sid = "XE";
+    final private static String username = "hr";
+    final private static String password = "root";
+    public static String connectionUrl = "jdbc:oracle:thin:" + server + ":" + port + ":" + sid;
+    
+    //Запрос выборки Select
+    public static ResultSet Selector(String zapros) 
+    { 
+        try 
+        { 
+            Locale.setDefault(Locale.ENGLISH);
+            ResultSet rs; 
+            Class.forName(config); 
+            Connection con = DriverManager.getConnection(connectionUrl, username, password); 
+            Statement stmt= con.createStatement(); 
+            rs = stmt.executeQuery(zapros); 
+            return rs; 
+        } 
+        catch (Exception ex) { 
+            JOptionPane.showMessageDialog(null, ex); 
+            return null; 
+        } 
+    }  
+}
+
+
+//Запрос
+try {
+            String sql1;
+            sql1 = "select country_name from countries";
+            ResultSet rs = Database.Selector(sql1);
+                while(rs.next()){
+                String str = rs.getString(1);
+                jComboBox1.addItem(str);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DataForm1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
